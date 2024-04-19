@@ -1,0 +1,113 @@
+.solar-system-map {
+  height: 95vh;
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+}
+.satellite-label {
+  color: #fff;
+  font-family: sans-serif;
+  background: none;
+  padding: 3px;
+  transition: 0.5s;
+  border-radius: 25%;
+}
+
+.satellite-label:hover {
+  box-shadow: 0 0 5px yellow;
+  cursor: pointer;
+}
+
+.header {
+  background-color: #282c34;
+  height: 5vh;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+}
+
+.flexbox-space-around {
+  display: flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: space-around;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* #leva__root > * {
+  width: 300px;
+} */
+
+/* To initially position leva options panel to top left */
+.leva-c-kWgxhW-bCBHqk-fill-false:nth-child(odd) {
+  top: 6vh;
+  left: 2vw;
+  width: 300px;
+} 
+
+/* To initially position leva info panel to top right */
+.leva-c-kWgxhW-bCBHqk-fill-false:nth-child(even) {
+  top: 6vh;
+  right: 2vw;
+  width: 400px;
+} 
+
+/* To remove top-right search button, must include last-child because of sibling */
+.leva-c-ctBOWy:last-child {
+  display: none;
+}
+
+/* Removes "v" slider that appears sometimes with numbers or percentages */
+.leva-c-ezwCcA {
+  display: none;
+}
+
+/* Reformats after getting rid of "v" slider */
+.leva-c-ezwCcA + .leva-c-ghmOOI {
+  padding-left: var(--leva-space-sm);
+}
+
+/* Reformats after getting rid of "v" slider */
+.leva-c-ghmOOI-gsXdEb-levaType-number {
+  text-align: revert;
+}
+
+/* Leva input labels */
+.leva-c-iSkYoW {
+  color: yellow;
+}
+
+.search-input {
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.matched-search-term {
+  color: white;
+  list-style-type: none;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.matched-search-term:hover {
+  background-color: #282c34;
+}
+
+.search-dropdown-content {
+  position: absolute;
+  top: 6vh;
+  left: 2vw;
+  background-color: rgb(109, 100, 100);
+  cursor: pointer;
+  z-index: 1000;
+  border-radius: 5px;
+}
+
+.entire-search-div {
+  overflow: visible;
+}
+
+ul {
+  padding-left: 0;
+}

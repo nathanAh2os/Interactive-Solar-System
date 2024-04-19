@@ -1,0 +1,51 @@
+Future Features
+
+1) Add minimum size to planets if scrolled out so you can still see where the planets are located. 
+    If scrolled in more, give actual size of planets. ?
+
+2) Add moon orbits
+
+3) Add comit orbits
+
+4) Add more dwarf planet orbits
+
+5) Change perspective camera rotational speed based on zoom level / distance from near plane
+    i.e. the closer to the near plane, the lower the rotational speed needs to be
+    Panning speed seems to already adjust to this, but I may need to do some further customization 
+    to the panning speeds when very zoomed in.
+
+6) Connect orbit path from end point to beginning point.
+    mercury fine
+    venus fine
+    mars bongo
+    earth fine
+    jupiter fine
+    saturn bongo
+    neptune fine
+    uranus fine
+    pluto bongo
+
+7) Add a toggle menu to turn on and off certain things (i.e. dwarf planets, comets, etc. )
+
+Bugs
+
+1) If windows resized, map gets cut off
+    Solved -- Created a resize event listener that reset width and height, then reset the scene and renderer
+
+        1a) If resized and orbit control used, will stretch and disfigure orbit paths
+            Solved -- Initialize smaller fov values on the perspective camera
+
+        1b) Orbit controls ZOOM & PANNING are reduced when resized
+            SOLVED -- Have no idea how I fixed
+
+        1c) Camera initial z position get changed for some reason when first resized    
+            SOLVED -- Have no idea how I fixed
+
+2) White outline appears when map is clicked on.
+    Solved -- in solarSystemMap.css, add { overflow: hidden } property
+
+3) Orbit Controls on the 2D Renderer can get off from the solar map 
+    Solved --
+
+4) Dragging with right click on the orbit controls makes the planet labels go away from their intended planet targets
+    Solved --
