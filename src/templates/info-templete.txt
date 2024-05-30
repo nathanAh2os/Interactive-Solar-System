@@ -1,0 +1,30 @@
+name: "Tethys",
+classification: "Moon",
+shape: "Ellipsoid", //Usually either Ellipsoid or Irregular
+parentSatellite: "",
+features: "",
+length: 1076.8, km 1sig
+width: 1057.4, km 1sig
+height: 1052.6, km 1sig //If ellipsoid shape, try polar diameter & equatorial diameter but sometimes can only find mean diameter
+mass: 6.175e20, kg 3sig
+minTemperature: 0, C 1sig
+maxTemperature: 0, C 1sig
+meanTemperature: -187, C 1sig
+surfaceGravity: 0.146, g 3sig // m/s2
+meanBodyDensity: 0.984, g/cm3 3sig
+atmosphere: "none", if none otherwise
+atmosphereComposition: {
+    Contains: ""
+}
+atsmophereComposition: { 3sig
+    Nitrogen: 95%
+    Argon: 3%
+    Carbon Dioxide: 1%
+    Other: 1%
+}
+orbitalSidereal: "1.888d", 3h 45m 13s, yr d 3sig 
+orbitalSynodic: "0d",
+rotationalSidereal: "Synchronous",
+rotationalSynodic: "Synchronous",
+averageOrbitalSpeed: 11.35, km/s 2sig
+eccentricity: 0.0001, 3sig (has no units)

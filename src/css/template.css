@@ -1,8 +1,36 @@
+/* body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+
+body {
+  margin: 0;
+  font-family: "Verdana",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: "Verdana",
+    monospace;
+}
+
 .solar-system-map {
-  height: 95vh;
+  height: 100vh;
   background-color: #000000;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 .satellite-label {
   color: #fff;
@@ -11,6 +39,7 @@
   padding: 3px;
   transition: 0.5s;
   border-radius: 25%;
+  z-index: 2;
 }
 
 .satellite-label:hover {
@@ -39,18 +68,40 @@
   width: 300px;
 } */
 
-/* To initially position leva options panel to top left */
-.leva-c-kWgxhW-bCBHqk-fill-false:nth-child(odd) {
-  top: 6vh;
+/* Hack to remove clipboard buttons on our leva data field labels */
+svg {
+  width: none;
+  min-width: none;
+  height: none;
+}
+
+/* .leva-c-hBtFDW {
+  height: fit-content;
+} */
+
+/* .leva-c-hBtFDW-lbFLlY-isRoot-false {
+  all: revert;
+} */
+
+/* Panel title color */
+.leva-c-iLtnIm {
+  color: yellow;
+}
+
+/* To initially position leva options panel to top left (originally odd) */
+.leva-c-kWgxhW-bCBHqk-fill-false:nth-child(even) {
+  top: 2vh;
   left: 2vw;
   width: 300px;
+  z-index: 3;
 } 
 
-/* To initially position leva info panel to top right */
-.leva-c-kWgxhW-bCBHqk-fill-false:nth-child(even) {
-  top: 6vh;
+/* To initially position leva info panel to top right (originally even) */
+.leva-c-kWgxhW-bCBHqk-fill-false:nth-child(odd) {
+  top: 2vh;
   right: 2vw;
   width: 400px;
+  z-index: 3;
 } 
 
 /* To remove top-right search button, must include last-child because of sibling */

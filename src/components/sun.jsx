@@ -11,7 +11,7 @@ const Sun = ({ DOMAIN_URL, zoomToObject, searchTerm }) => {
 	//let tweenGroupSun = new TWEEN.Group();
 
 	if (searchTerm === "sun") {
-		zoomToObject("sun", 50, 0, 0, 0);
+		zoomToObject("sun", "none", 50, 0, 0, 0);
 	}
 
 /* 	useFrame(() => {
@@ -25,7 +25,7 @@ const Sun = ({ DOMAIN_URL, zoomToObject, searchTerm }) => {
 				<meshBasicMaterial map={planetTexture} />
 			</mesh>
 			<Html position={[0,0,0]}>
-				<div className="satellite-label" onClick={() => zoomToObject("sun", 50, 0, 0, 0)}>Sun</div>
+				<div className="satellite-label" onClick={() => zoomToObject("sun", "none", 50, 0, 0, 0)}>Sun</div>
 			</Html>
 		</>
 	);

@@ -1,9 +1,8 @@
 import TWEEN from "@tweenjs/tween.js";
 import { useFrame } from "@react-three/fiber";
 
-//Need this for TWEEN to work for some reason
+//Need this for TWEEN to work
 const Tween = () => {
-	console.log("Tween()");
 	useFrame(() => {
 		TWEEN.update();
 	});

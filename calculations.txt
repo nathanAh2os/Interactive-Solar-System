@@ -1,0 +1,91 @@
+Calculations, Terms, Constants & Equations
+
+2451545.0 Julian Ephemeris on January 1, 2000
+
+2460348.51351 Julian Ephemeris on January 1, 1970
+
+Date.now() returns the number of milliseconds since January 1, 1970
+86400000 is the number of milliseconds in 1 day
+[Date.now() - 86400000] = number of days since January 1, 1970
+Adding both values together gets our current Julian Ephemeris Date
+
+T = ( julianEphemerisDate - refJulianDate ) / 36,525
+T is centuriesPast
+trueKep = refKep + ( rateOfChangeKep ) * T
+e.g. :  a = a0 + ( a1 ) * ( T )
+
+
+M = n * (t - t_p) where:
+M is arbitrary mean anomoly associated with t
+n is mean angular motion = 2PI / siderealPeriod
+t is arbitrary julian time associated with M
+t_p is time of periapse
+
+L = Ω + ω + M, 
+L is 
+Ω is the longitude of the ascending node, 
+ω is the argument of the pericenter  
+M is the mean anomaly
+
+SPICE INPUTS FOR PLANETS
+Kernels: Solar System Kernels kernel set, Latest Leapseconds Kernel kernel set,
+	IMPORTANT - New Horizons kernal set needed for some dwarf planets
+Orbiting object: ""
+Center of motion: ""
+Reference frame: ECLIPJ2000
+Time system: TDB
+Time format: Julian Date
+Input times: Single Time
+JULIAN RANGE: 2451545.0 (Single Calculation) TO ... 2480186.52570478 (Single Calculation) [To obtain rates of change]
+
+SPICE                                 HORIZONS										TRUE KEPS
+Perifocal distance(km)				a	semi-major Axis								semiMajorAxis
+Eccentricity						e	eccentricity								eccentricity
+Inclination (deg)					i	inclination									inclination
+Ascending node longitude (deg)		node longitude of the ascending node N			longitudeAscendNode N
+Argument of periapse (deg)			ω	argument of periapsis/perehelion			X meanLongitude X
+Mean anomaly (deg)					M	mean anomaly								X longitudePerihelion w1 X (only for mean anomoly)
+
+/* 	The primary orbital elements are here denoted as:
+    N = longitude of the ascending node
+    i = inclination to the ecliptic (plane of the Earth's orbit)
+    w = argument of perihelion
+    a = semi-major axis, or mean distance from Sun
+    e = eccentricity (0=circle, 0-1=ellipse, 1=parabola)
+    M = mean anomaly (0 at perihelion; increases uniformly with time)
+Related orbital elements are:
+    w1 = N + w   = longitude of perihelion
+    L  = M + w1  = mean longitude
+    q  = a*(1-e) = perihelion distance
+    Q  = a*(1+e) = aphelion distance
+    P  = a ^ 1.5 = orbital period (years if a is in AU, astronomical units)
+    T  = Epoch_of_M - (M(deg)/360_deg) / P  = time of perihelion
+    v  = true anomaly (angle between position and perihelion)
+    E  = eccentric anomaly */
+
+//https://orbital-mechanics.space/the-orbit-equation/elliptical-orbits.html
+export const buildMoonOrbitCoordinates = (a, e, parentCoords) => {
+	console.log("buildMoonOrbitCoordinates()");
+	let orbitPath = [];
+
+	for (let i = 1; i < 361; i++) {
+		let radianAngle = (i * Math.PI) / 180;
+		let r = a * (((1 - e) ^ 2) / (1 + e * Math.cos(radianAngle)));
+		let distanceX = Math.abs(r) * Math.cos(radianAngle);
+		let distanceY = Math.abs(r) * Math.sin(radianAngle);
+		let z = parentCoords[2];
+		let x = parentCoords[0] + distanceX;
+		let y = parentCoords[1] + distanceY;
+		orbitPath.push([x, y, z]);
+	}
+	return orbitPath;
+};
+
+const calculateMeanAnomaly = (meanLongitude, longitudePerihelion) => {
+	//Compute argument of perihelion, and mean anomaly, M
+	//We obtain the modulas of the mean anomaly between -360 <= M <= 360
+	//let perihelion = longitudePerihelion - longitudeAscendNode;
+	let meanAnomaly = meanLongitude - longitudePerihelion;
+	meanAnomaly = (meanAnomaly * Math.PI) / 180;
+	return meanAnomaly;
+};

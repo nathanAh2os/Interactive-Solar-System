@@ -8,7 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 //Leva imports
-import { useControls, button, buttonGroup, useStoreContext, useCreateStore, LevaPanel } from "leva";
+import { useControls, button, buttonGroup, useCreateStore, LevaPanel } from "leva";
 //https://github.com/pmndrs/leva#readme
 //https://sbcode.net/react-three-fiber/leva/
 //https://leva.mentat.org/
@@ -18,40 +18,42 @@ import { throttle } from "lodash";
 
 //TWEEN imports
 import TWEEN from "@tweenjs/tween.js";
-
-//Scene component imports
-import Sun from "../components/sun";
-import Mercury from "../components/planets/mercury";
-import Venus from "../components/planets/venus";
-import Earth from "../components/planets/earth";
-import Mars from "../components/planets/mars";
-import Jupiter from "../components/planets/jupiter";
-import Saturn from "../components/planets/saturn";
-import Uranus from "../components/planets/uranus";
-import Neptune from "../components/planets/neptune";
-import Pluto from "../components/dwarf-planets/pluto";
 import Tween from "./tween";
 
-import EarthMoon from "../components/moons/earth-moon";
+//Scene Sun & Planet Component imports
+import Sun from "../components/sun";
 
-//Leva Satellite Info imports
-import MercuryInfo from "../components/planets/planet-info/mercury-info";
-import VenusInfo from "../components/planets/planet-info/venus-info";
-import EarthInfo from "../components/planets/planet-info/earth-info";
-import MarsInfo from "../components/planets/planet-info/mars-info";
-import JupiterInfo from "../components/planets/planet-info/jupiter-info";
-import SaturnInfo from "../components/planets/planet-info/saturn-info";
-import UranusInfo from "../components/planets/planet-info/uranus-info";
-import NeptuneInfo from "../components/planets/planet-info/neptune-info";
-import PlutoInfo from "../components/dwarf-planets/dwarf-planet-info/pluto-info";
+//Parent Satellite import
+import ParentSatellite from "../templates/parent-satellite";
+import ChildSatellite from "../templates/child-satellite";
+
+//Satellite Info Dictionary imports
+import { parentSatelliteDictionary, childSatelliteDictionary } from "../dictionaries/satellite-info-dictionary";
+
+//Keplerian Data Dictionary imports
+import {
+	planetKepDictionary,
+	dwarfPlanetKepDictionary,
+	moonsKepDictionary,
+} from "../dictionaries/keplerian-dictionary";
+
+//Leva Satellite Info Component import
+import InfoPanel from "../info-panel/info-panel";
+
+// Initialize Firebase
+/* import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+import { getDatabase, ref, child, get } from "firebase/database";
+const dbRef = ref(getDatabase()); */
 
 const SolarSystemMap = () => {
 	console.log("SolarSystemMap()");
-
 	const julian1970Date = 2460348.51351; //Julian Ephemeris on January 1, 1970
-	const refreshTime = 360000; //1 hour
-	const zoomShowInnerLabel = 5000;
-	//const refreshTime = 5000;
+	const refreshTime = 360000; //1 hour, 5000 for 5 seconds
+	const innerLabelZoomLevel = 5000;
+	const moonLabelZoomLevel = 100;
 	const DOMAIN_URL = "http://localhost:3000/";
 	//const DOMAIN_URL = "https://react-map-project-95e99.web.app/";
 	const cameraSettings = {
@@ -63,51 +65,66 @@ const SolarSystemMap = () => {
 	};
 	const scene = { antialias: true, logarithmicDepthBuffer: true };
 	const ref = useRef();
+	const optionsStore = useCreateStore();
 
 	// ********** STATE VALUES **********
-
-	//Date.now() returns the number of milliseconds since January 1, 1970
-	//86400000 is the number of milliseconds in 1 day
-	//[Date.now() - 86400000] = number of days since January 1, 1970
-	//Adding both values together gets our current Julian Ephemeris Date
 	let [julianEphemerisDate, setDate] = useState(Date.now() / 86400000 + julian1970Date);
-	let [showDwarfPlanets, setShowDwarfPlanets] = useState(false);
-	let [showComets, setShowComets] = useState(false);
-	let [searchTerm, setSearchTerm] = useState("");
-	let [matchedSearchList, setMatchedSearchList] = useState([]);
-	let [target, setTarget] = useState("none");
+	let [parentTarget, setParentTarget] = useState("none");
+	let [childTarget, setChildTarget] = useState("none");
+	//Info Panel
+	let [infoPanelData, setInfoPanelData] = useState(null);
+	let [parentTargetCoords, setParentTargetCoords] = useState(null);
+	let [parentTargetZoomLevel, setParentTargetZoomLevel] = useState(null);
+	let [targetMoonsCoords, setTargetMoonsCoords] = useState([]);
+	//Keplerian Data
+	let [defaultPlanetsKepData, setDefaultPlanetsKepData] = useState([]);
+	let [dwarfPlanetsKepData, setDwarfPlanetsKepData] = useState([]);
+	let [moonsKepData, setMoonsKepData] = useState([]);
+	//Labels
 	let [innerLabels, setInnerLabels] = useState(false);
-	console.log("julian date: ");
-	console.log(julianEphemerisDate);
-	//Unit state values
+	let [moonLabels, setMoonLabels] = useState(false);
+	//Units
 	let [tempUnit, setTempUnit] = useState("C");
 	let [pressureUnit, setPressureUnit] = useState("atm");
 	let [lengthUnit, setLengthUnit] = useState("km");
 	let [orbitalUnit, setOrbitalUnit] = useState("sidereal");
-
-	let searchList = ["mercury", "mars", "venus", "earth", "jupiter", "saturn", "uranus", "neptune"];
-
 	//JSX values
-	let matchedSearchListJSX;
-	let dropDownContentJSX;
-	let satelliteInfoJSX;
-
-	const optionsStore = useCreateStore();
-	const infoStore = useCreateStore();
+	let defaultSatellitesJSX = null;
+	let dwarfPlanetsJSX = null;
+	let moonsJSX = null;
+	let infoPanelJSX = null;
 
 	//Leva GUI - useControl hook automatically creates a Leva GUI Overlay
 	const filterOptions = useControls(
 		"Filter Options",
-		{ "Dwarf Planets": showDwarfPlanets, Comets: showComets },
+		{
+			"Dwarf Planets": false,
+			Comets: false,
+			"Solar Plane": false,
+			"Artificial Satellites": false,
+			"Asteroid Belt": false,
+			"Kuiper Belt": false,
+		},
 		{ store: optionsStore }
 	);
 
-	const controlOptions = useControls(
-		"Control Options",
+	const UIOptions = useControls(
+		"UI Options",
+		{
+			"Planet Orbit": "#24729c",
+			"Dwarf Planet Orbit": "#033c5b",
+			"Moon Orbit": "#05af32",
+		},
+		{ store: optionsStore }
+	);
+
+	const cameraOptions = useControls(
+		"Camera Options",
 		{
 			"Zoom Speed": { value: 5, min: 0, max: 10, step: 1 },
 			"Rotate Speed": { value: 1, min: 0, max: 2, step: 0.1 },
 			"Panning Speed": { value: 1, min: 0, max: 2, step: 0.1 },
+			"Side View": button(() => viewFromSide()),
 			"Reset Camera": button(() => resetCamera()),
 		},
 		{ store: optionsStore }
@@ -127,8 +144,6 @@ const SolarSystemMap = () => {
 			Length: buttonGroup({
 				km: () => setLengthUnit("km"),
 				mi: () => setLengthUnit("mi"),
-				m: () => setLengthUnit("m"),
-				ft: () => setLengthUnit("ft"),
 			}),
 			Orbital: buttonGroup({
 				sidereal: () => setOrbitalUnit("sidereal"),
@@ -138,229 +153,190 @@ const SolarSystemMap = () => {
 		{ store: optionsStore }
 	);
 
-	const searchOptions = useControls(
+	const about = useControls(
+		"About",
 		{
-			Search: {
-				value: searchTerm,
-				onChange: (value) => {
-					console.log("onChange()");
-					console.log(target);
-					// imperatively update the world after Leva input changes
-					let lowerCaseValue = value.toLowerCase();
-					let tempArray = [];
-
-					if (value.length > 0) {
-						searchList.forEach((term) => {
-							if (term.includes(lowerCaseValue)) {
-								let capitalizedTerm = term.charAt(0).toUpperCase() + term.slice(1);
-								tempArray.push(capitalizedTerm);
-							}
-						});
-					}
-					setMatchedSearchList(tempArray);
-					setSearchTerm(lowerCaseValue);
-					//selectedSearchTerm(lowerCaseValue);
-				},
-				transient: false,
-			},
+			"Kepelerian Calculations": "https://naif.jpl.nasa.gov/naif/toolkit.html",
+			"Planet HD Textures": "fdsa",
 		},
 		{ store: optionsStore }
 	);
 
-	if (target === "none") {
-		satelliteInfoJSX = null;
-	} else {
-		switch (target) {
-			case "mercury":
-				satelliteInfoJSX = <MercuryInfo />;
-				break;
-			case "venus":
-				satelliteInfoJSX = <VenusInfo />;
-				break;
-			case "earth":
-				satelliteInfoJSX = (
-					<EarthInfo
-						infoStore={infoStore}
-						tempUnit={tempUnit}
-						pressureUnit={pressureUnit}
-						lengthUnit={lengthUnit}
-						orbitalUnit={orbitalUnit}
-					/>
-				);
-				break;
-			case "mars":
-				satelliteInfoJSX = <MarsInfo />;
-				break;
-			case "jupiter":
-				satelliteInfoJSX = <JupiterInfo />;
-				break;
-			case "saturn":
-				satelliteInfoJSX = <SaturnInfo />;
-				break;
-			case "uranus":
-				satelliteInfoJSX = <UranusInfo />;
-				break;
-			case "neptune":
-				satelliteInfoJSX = <NeptuneInfo />;
-				break;
-			case "pluto":
-				satelliteInfoJSX = <PlutoInfo />;
-				break;
-			case "none":
-				satelliteInfoJSX = null;
-				break;
-			default:
-				break;
-		}
-	}
+	useEffect(() => {
+		let planetArray = [];
+		planetKepDictionary.forEach((value) => {
+			planetArray.push(value);
+		});
+		setDefaultPlanetsKepData(() => planetArray);
 
-	/* 	//No matches found
-	if (searchTerm.length > 0 && matchedSearchList.length === 0) {
-		matchedSearchListJSX = <li className="matched-search-term">No matches found!</li>;
-		dropDownContentJSX = (
-			<div className="search-dropdown-content">
-				<ul>{matchedSearchListJSX}</ul>
-			</div>
-		);
-	}
-	//Matches found
-	else if (searchTerm.length > 0 && matchedSearchList.length > 0) {
-		matchedSearchListJSX = matchedSearchList.map((matchedTerm, index) => (
-			<li className="matched-search-term" key={index} onClick={() => selectedSearchTerm(matchedTerm)}>
-				<p>{matchedTerm}</p>
-			</li>
-		));
-		dropDownContentJSX = (
-			<div className="search-dropdown-content">
-				<ul>{matchedSearchListJSX}</ul>
-			</div>
-		);
-	}
-	//No search - no dropdown content
-	else if (searchTerm.length === 0) {
-		dropDownContentJSX = null;
-	} */
+		let dwarfPlanetArray = [];
+		dwarfPlanetKepDictionary.forEach((value) => {
+			dwarfPlanetArray.push(value);
+		});
+		setDwarfPlanetsKepData(() => dwarfPlanetArray);
+	}, []);
 
 	useEffect(() => {
-		console.log("SolarSystemMap() useEffect()");
 		setInterval(() => {
-			console.log("interval");
 			setDate(Date.now() / 86400000 + julian1970Date);
 		}, refreshTime);
 	}, []);
 
 	// ********** DEFINED FUNCTIONS **********
+	const updateAllTargetInfo = (parentSatellite, childSatellite, zoomLevel, x, y, z) => {
+		//For return to parent satellite btn & updating info panel when that btn clicked
+		if (childSatellite === "none") {
+			setParentTargetCoords([x, y, z]);
+			setParentTargetZoomLevel(zoomLevel);
+			setInfoPanelData(() => parentSatelliteDictionary.get(parentSatellite));
+		} else {
+			setInfoPanelData(() => childSatelliteDictionary.get(childSatellite));
+		}
 
-	const zoomToObject = (name, zoomLevel, x, y, z) => {
-		console.log("zoomToObject()");
+		//Same parent target, only changing child target
+		if (parentSatellite !== parentTarget) {
+			setTargetMoonsCoords([]); //Reset moons coords, needed when changing parent targets
 
+			setParentTarget(parentSatellite);
+			let tempArray = moonsKepDictionary.get(parentSatellite);
+
+			//So that infoPanel will show for an object with no moons
+			if (tempArray.length === 0) {
+				setTargetMoonsCoords(["none"]);
+			}
+			setMoonsKepData(() => tempArray);
+		}
+		setChildTarget(childSatellite);
+	};
+
+	const zoomToObject = (parentSatellite, childSatellite, zoomLevel, x, y, z) => {
 		//Rotate camera to point at new object
 		new TWEEN.Tween(ref.current.target).to({ x: x, y: y, z: z }).easing(TWEEN.Easing.Cubic.Out).start();
 
 		//Move the camera to new position
 		new TWEEN.Tween(ref.current.object.position)
-			.to({ x: x, y: y, z: zoomLevel }, 4000)
+			.to({ x: x, y: y, z: zoomLevel }, 2500)
 			.easing(TWEEN.Easing.Cubic.Out)
 			.start();
 
-		//To trigger setting satellite info
-		setTarget(name);
+		updateAllTargetInfo(parentSatellite, childSatellite, zoomLevel, x, y, z);
+	};
+
+	const viewFromSide = () => {
+		console.log("viewFromSide()");
+		console.log(ref.current);
 	};
 
 	const resetCamera = () => {
 		ref.current.reset();
-		setTarget("none");
-		setSearchTerm("");
+		setParentTarget("none");
+		setChildTarget("none");
+		setParentTargetCoords(null);
+		setParentTargetZoomLevel(null);
+		setTargetMoonsCoords([]);
+		setInfoPanelData(null);
 	};
 
-	//listens to zoom level so we can toggle inner planet labels on/off
+	//listens to zoom level for:
 	const handleZoom = () => {
 		let currentZoomLevel = ref.current.getDistance();
-
-		if (currentZoomLevel < zoomShowInnerLabel) {
+		//toggling inner planet labels on/off
+		if (currentZoomLevel < innerLabelZoomLevel) {
 			setInnerLabels(true); //Shows inner planet labels
 		} else {
 			setInnerLabels(false);
 		}
+		//toggling moon labels on/off
+		if (currentZoomLevel < moonLabelZoomLevel) {
+			setMoonLabels(true);
+		} else {
+			setMoonLabels(false);
+		}
 	};
+
+	//Set JSX values
+	defaultSatellitesJSX = defaultPlanetsKepData.map((data) => (
+		<ParentSatellite
+			key={data.name}
+			data={data}
+			DOMAIN_URL={DOMAIN_URL}
+			julianEphemerisDate={julianEphemerisDate}
+			zoomToObject={zoomToObject}
+			innerLabels={innerLabels}
+			planetOrbitColor={UIOptions["Planet Orbit"]}
+		/>
+	));
+
+	if (filterOptions["Dwarf Planets"] !== false) {
+		dwarfPlanetsJSX = dwarfPlanetsKepData.map((data) => (
+			<ParentSatellite
+				key={data.name}
+				data={data}
+				DOMAIN_URL={DOMAIN_URL}
+				julianEphemerisDate={julianEphemerisDate}
+				zoomToObject={zoomToObject}
+				innerLabels={innerLabels}
+				planetOrbitColor={UIOptions["Dwarf Planet Orbit"]}
+			/>
+		));
+	}
+
+	if (parentTarget !== "none") {
+		moonsJSX = moonsKepData.map((data) => (
+			<ChildSatellite
+				key={data.name}
+				data={data}
+				parentTarget={parentTarget}
+				DOMAIN_URL={DOMAIN_URL}
+				julianEphemerisDate={julianEphemerisDate}
+				zoomToObject={zoomToObject}
+				setTargetMoonsCoords={setTargetMoonsCoords}
+				moonLabels={moonLabels}
+				moonOrbitColor={UIOptions["Moon Orbit"]}
+				centerOfRotation={parentTargetCoords}
+			/>
+		));
+		//Otherwise moon zoom btns won't work because targetMoonCoords has not async set yet
+		if (infoPanelData !== null && targetMoonsCoords.length !== 0) {
+			infoPanelJSX = (
+				<InfoPanel
+					key={infoPanelData.name}
+					data={infoPanelData}
+					tempUnit={tempUnit}
+					pressureUnit={pressureUnit}
+					lengthUnit={lengthUnit}
+					orbitalUnit={orbitalUnit}
+					parentTargetCoords={parentTargetCoords}
+					parentTargetZoomLevel={parentTargetZoomLevel}
+					targetMoonsCoords={targetMoonsCoords}
+					zoomToObject={zoomToObject}
+				/>
+			);
+		}
+	}
 
 	return (
 		<>
-			{dropDownContentJSX}
 			<div className="solar-system-map">
 				<Canvas camera={cameraSettings} scene={scene}>
 					<OrbitControls
 						ref={ref}
+						maxDistance={100000} //maxDistance (not maxZoom) for perspective cam
 						makeDefault
-						zoomSpeed={controlOptions["Zoom Speed"]}
-						rotateSpeed={controlOptions["Rotate Speed"]}
-						panSpeed={controlOptions["Panning Speed"]}
+						zoomSpeed={cameraOptions["Zoom Speed"]}
+						rotateSpeed={cameraOptions["Rotate Speed"]}
+						panSpeed={cameraOptions["Panning Speed"]}
 						onChange={throttle(handleZoom, 500)}
 					/>
 					<Tween />
-					<Sun DOMAIN_URL={DOMAIN_URL} zoomToObject={zoomToObject} searchTerm={searchTerm} />
-					<Mercury
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-						innerLabels={innerLabels}
-					/>
-					<Venus
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-						innerLabels={innerLabels}
-					/>
-					<Earth
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-						innerLabels={innerLabels}
-					/>
-					<Mars
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-						innerLabels={innerLabels}
-					/>
-					<Jupiter
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-					/>
-					<Saturn
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-					/>
-					<Uranus
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-					/>
-					<Neptune
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-					/>
-					<Pluto
-						DOMAIN_URL={DOMAIN_URL}
-						julianEphemerisDate={julianEphemerisDate}
-						zoomToObject={zoomToObject}
-						searchTerm={searchTerm}
-					/>
+					<Sun DOMAIN_URL={DOMAIN_URL} zoomToObject={zoomToObject} parentTarget={parentTarget} />
+					{defaultSatellitesJSX}
+					{dwarfPlanetsJSX}
+					{moonsJSX}
 				</Canvas>
 			</div>
-			<LevaPanel store={optionsStore} flat titleBar={true} />
-			{satelliteInfoJSX}
+			<LevaPanel store={optionsStore} flat collapsed titleBar={{ title: "Solar System Options" }} />
+			{infoPanelJSX}
 		</>
 	);
 };
