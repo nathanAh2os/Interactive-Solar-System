@@ -1,7 +1,7 @@
 import { button } from "leva"; //For parseMoonsInfo
 
 export const parsePhysicalInfo = (data) => {
-	console.log("parsePhysicalInfo()");
+	//console.log("parsePhysicalInfo()");
 	let physicalObj = { Classification: data.classification };
 	let dimensionsObj;
 	let temperaturesObj;
@@ -117,19 +117,17 @@ export const parseOrbitalInfo = (data) => {
 	return orbitalObj;
 };
 
-export const parseMoonsInfo = (data, targetMoonsCoords, zoomToObject) => {
+export const parseMoonsInfo = (data, targetMoonsCoords, targetSelected) => {
 	let moonsObj = {};
-	console.log("parseMoonsInfo()");
-	console.log(targetMoonsCoords);
 
 	data.moons.forEach((moon, i) => {
 		if (moon !== "none" && moon !== "N/A") {
 			//targetMoonsCoords.forEach((value, index) => {
-			console.log(targetMoonsCoords[i]);
+			//console.log(targetMoonsCoords[i]);
 			//console.log(targetMoonsCoords[i]["zoomLevel"]);
 			let moonBtn = {
 				[moon]: button(() =>
-					zoomToObject(
+					targetSelected(
 						data.name,
 						moon,
 						targetMoonsCoords[i].zoomLevel, //value[index].zoomLevel,
@@ -146,7 +144,7 @@ export const parseMoonsInfo = (data, targetMoonsCoords, zoomToObject) => {
 	return moonsObj;
 };
 
-export const setReturnBtn = (classification, currentParentCoords, parentSatellite, parentZoomLevel, zoomToObject) => {
+export const setReturnBtn = (classification, currentParentCoords, parentSatellite, parentZoomLevel, targetSelected) => {
 	let returnBtn = {};
 	let x = currentParentCoords[0];
 	let y = currentParentCoords[1];
@@ -155,7 +153,7 @@ export const setReturnBtn = (classification, currentParentCoords, parentSatellit
 	if (classification === "Moon") {
 		returnBtn = {
 			["Return to Parent Satellite"]: button(() =>
-				zoomToObject(parentSatellite, "none", parentZoomLevel, x, y, z)
+				targetSelected(parentSatellite, "none", parentZoomLevel, x, y, z)
 			),
 		};
 	}
@@ -163,17 +161,10 @@ export const setReturnBtn = (classification, currentParentCoords, parentSatellit
 };
 
 //Utility functions
-const setMoon = (parentSatellite, moon, targetMoonsCoords, zoomToObject) => {
-	console.log("setMoon()");
-	console.log(parentSatellite);
-	console.log(moon);
-	console.log(targetMoonsCoords);
-	console.log(zoomToObject);
+const setMoon = (parentSatellite, moon, targetMoonsCoords, targetSelected) => {
 	targetMoonsCoords.forEach((value) => {
-		console.log(value);
-		console.log(moon);
 		if (value.name === moon) {
-			zoomToObject(parentSatellite, moon, value.zoomLevel, value.x, value.y, value.z);
+			targetSelected(parentSatellite, moon, value.zoomLevel, value.x, value.y, value.z);
 		}
 	});
 };

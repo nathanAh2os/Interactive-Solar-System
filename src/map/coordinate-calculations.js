@@ -20,12 +20,7 @@ export const buildOrbit = (julianEphemerisDate, kepJ2000, kepRates, data, length
 			trueKepValues.semiMajorAxis,
 			trueKepValues.eccentricity
 		);
-		let currentCoordinate = calculateCoordinates(
-			trueKepValues,
-			trueAnomoly,
-			eccentricAnomoly,
-			data.centerOfRotation
-		);
+		let currentCoordinate = calculateCoordinates(trueKepValues, trueAnomoly, eccentricAnomoly);
 		orbitPath.push([currentCoordinate[0], currentCoordinate[1], currentCoordinate[2]]);
 
 		julianEphemerisDate = julianEphemerisDate + length / numberOfPlots;
@@ -91,9 +86,7 @@ const calculateEccentricAnomaly = (meanAnomaly, eccentricity) => {
 		i = i + 1;
 	}
 	E = E / (Math.PI / 180);
-	//eccentricAnomaly = Math.round(E * Math.pow(10, dp)) / Math.pow(10, dp);
 	let eccentricAnomaly = E;
-	//eccentricAnomaly = Math.round(eccentricity * Math.pow(10, dp)) / Math.pow(10, dp);
 	return eccentricAnomaly;
 };
 
@@ -105,7 +98,7 @@ const calculateTrueAnomaly = (eccentricAnomaly, semiMajorAxis, eccentricity) => 
 	return trueAnomaly;
 };
 
-const calculateCoordinates = (trueKepValues, trueAnomaly, eccentricAnomaly, centerCoords) => {
+const calculateCoordinates = (trueKepValues, trueAnomaly, eccentricAnomaly) => {
 	//Convert from degrees to radians
 	let longitudeAscendNodeRad = (trueKepValues.longitudeAscendNode * Math.PI) / 180;
 	let eccentricAnomalyRad = (eccentricAnomaly * Math.PI) / 180;
@@ -131,10 +124,7 @@ const calculateCoordinates = (trueKepValues, trueAnomaly, eccentricAnomaly, cent
 				Math.sin(argumentOfPerihelionRad + trueAnomaly) *
 				Math.cos(inclinationRad));
 	let z = r * (Math.sin(argumentOfPerihelionRad + trueAnomaly) * Math.sin(inclinationRad));
-	//Apply center coords (if around sun just adding 0)
-	x = x + centerCoords[0];
-	y = y + centerCoords[1];
-	z = z + centerCoords[2];
+
 	let coordinates = [x, y, z];
 	return coordinates;
 };

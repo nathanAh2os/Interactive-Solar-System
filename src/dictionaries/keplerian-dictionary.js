@@ -61,7 +61,7 @@ export const planetKepDictionary = new Map([
 		{
 			name: "Earth",
 			url: "2k_earth_daymap.jpg",
-			zoomLevel: 1,
+			zoomLevel: 0.75,
 			siderealPeriod: 365.22,
 			t_a: 2480186.5,
 			m_a: 2.54547998,
@@ -89,7 +89,7 @@ export const planetKepDictionary = new Map([
 		{
 			name: "Mars",
 			url: "2k_mars.jpg",
-			zoomLevel: 0.25,
+			zoomLevel: 0.125,
 			siderealPeriod: 686.98,
 			t_a: 2480186.5,
 			m_a: 4.68047944,
@@ -119,7 +119,7 @@ export const planetKepDictionary = new Map([
 		{
 			name: "Jupiter",
 			url: "2k_jupiter.jpg",
-			zoomLevel: 1,
+			zoomLevel: 2,
 			siderealPeriod: 4332.589,
 			t_a: 2480186.5,
 			m_a: 4.20022402,
@@ -149,7 +149,7 @@ export const planetKepDictionary = new Map([
 		{
 			name: "Saturn",
 			url: "2k_saturn.jpg",
-			zoomLevel: 0.5,
+			zoomLevel: 4.5,
 			siderealPeriod: 10759.22,
 			t_a: 2480186.5,
 			m_a: 3.43073683,
@@ -179,7 +179,7 @@ export const planetKepDictionary = new Map([
 		{
 			name: "Uranus",
 			url: "2k_uranus.jpg",
-			zoomLevel: 0.5,
+			zoomLevel: 0.75,
 			siderealPeriod: 30689.15,
 			t_a: 2480186.5,
 			m_a: 1.95547809,
@@ -209,7 +209,7 @@ export const planetKepDictionary = new Map([
 		{
 			name: "Neptune",
 			url: "2k_neptune.jpg",
-			zoomLevel: 0.25,
+			zoomLevel: 0.5,
 			siderealPeriod: 60189,
 			t_a: 2480186.5,
 			m_a: 1.6763544,
@@ -241,7 +241,7 @@ export const dwarfPlanetKepDictionary = new Map([
 		"Pluto",
 		{
 			name: "Pluto",
-			url: "2k_neptune.jpg",
+			url: "pluto-texture-map.jpg",
 			zoomLevel: 0.125,
 			siderealPeriod: 90562.56,
 			t_a: 2480186.5,
@@ -361,8 +361,8 @@ export const dwarfPlanetKepDictionary = new Map([
 		"Ceres",
 		{
 			name: "Ceres",
-			url: "2k_neptune.jpg",
-			zoomLevel: 0.125,
+			url: "ceres-texture-map.jpg",
+			zoomLevel: 0.4,
 			siderealPeriod: 1680,
 			t_a: 2480186.5,
 			m_a: 18.63903895,
@@ -390,6 +390,7 @@ export const dwarfPlanetKepDictionary = new Map([
 ]);
 
 export const moonsKepDictionary = new Map([
+	["Sun", []],
 	["Mercury", []],
 	["Venus", []],
 	[
@@ -397,7 +398,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Moon",
-				url: "2k_neptune.jpg",
+				url: "moon-texture-map-2K.jpg",
 				zoomLevel: 0.25,
 				siderealPeriod: 27.322,
 				t_a: 2480186.5,
@@ -427,7 +428,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Phobos",
-				url: "2k_neptune.jpg",
+				url: "phobos-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 0.31891023,
 				t_a: 2480186.5,
@@ -452,7 +453,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Deimos",
-				url: "2k_neptune.jpg",
+				url: "deimos-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 1.263,
 				t_a: 2480186.5,
@@ -482,7 +483,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Ganymede",
-				url: "2k_neptune.jpg",
+				url: "ganymede-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 7.15455296,
 				t_a: 2480186.5,
@@ -532,7 +533,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Io",
-				url: "2k_neptune.jpg",
+				url: "io-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 1.769137786,
 				t_a: 2480186.5,
@@ -557,7 +558,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Europa",
-				url: "2k_neptune.jpg",
+				url: "europa-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 3.551181,
 				t_a: 2480186.5,
@@ -587,7 +588,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Titan",
-				url: "2k_neptune.jpg",
+				url: "titan-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 15.945,
 				t_a: 2480186.5,
@@ -612,7 +613,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Rhea",
-				url: "2k_neptune.jpg",
+				url: "rhea-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 4.518212,
 				t_a: 2480186.5,
@@ -637,7 +638,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Iapetus",
-				url: "2k_neptune.jpg",
+				url: "Iapetus-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 79.3215,
 				t_a: 2480186.5,
@@ -662,7 +663,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Dione",
-				url: "2k_neptune.jpg",
+				url: "dione-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 2.736915,
 				t_a: 2480186.5,
@@ -687,7 +688,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Tethys",
-				url: "2k_neptune.jpg",
+				url: "tethys-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 1.887802,
 				t_a: 2480186.5,
@@ -712,7 +713,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Enceladus",
-				url: "2k_neptune.jpg",
+				url: "enceladus-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 1.370218,
 				t_a: 2480186.5,
@@ -767,7 +768,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Ariel",
-				url: "2k_neptune.jpg",
+				url: "ariel-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 2.52,
 				t_a: 2480186.5,
@@ -792,7 +793,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Umbriel",
-				url: "2k_neptune.jpg",
+				url: "umbriel-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 4.144,
 				t_a: 2480186.5,
@@ -817,7 +818,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Titania",
-				url: "2k_neptune.jpg",
+				url: "titania-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 8.706234,
 				t_a: 2480186.5,
@@ -842,7 +843,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Oberon",
-				url: "2k_neptune.jpg",
+				url: "oberon-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 13.463234,
 				t_a: 2480186.5,
@@ -867,7 +868,7 @@ export const moonsKepDictionary = new Map([
 			},
 			{
 				name: "Miranda",
-				url: "2k_neptune.jpg",
+				url: "miranda-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 1.413479,
 				t_a: 2480186.5,
@@ -897,7 +898,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Triton",
-				url: "2k_neptune.jpg",
+				url: "triton-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 5.876854,
 				t_a: 2480186.5,
@@ -927,7 +928,7 @@ export const moonsKepDictionary = new Map([
 		[
 			{
 				name: "Charon",
-				url: "2k_neptune.jpg",
+				url: "charon-texture-map.jpg",
 				zoomLevel: 0.1,
 				siderealPeriod: 6.387221,
 				t_a: 2480186.5,
@@ -1061,23 +1062,23 @@ export const moonsKepDictionary = new Map([
 				zoomLevel: 0.1,
 				siderealPeriod: 12.4,
 				t_a: 2480186.5,
-				m_a: "unknown",
+				m_a: 0, //unknown
 				diameter: 0.00000117,
 				keplerianJ2000: {
 					//obtained from SPICE, J = 2451545
 					semiMajorAxis: 0.00014038,
-					eccentricity: "unknown",
-					inclination: "unknown",
-					longitudeAscendNode: "unknown",
-					argumentOfPerihelion: "unknown",
+					eccentricity: 0.01, //unknown, assume close to circular
+					inclination: 0, //unknown, assume 0
+					longitudeAscendNode: 123.95805544, //unknown
+					argumentOfPerihelion: 315.4342062, //unknown
 				},
 				keplerianArbitrary: {
 					//obtained from SPICE, J = 2480186.5
 					semiMajorAxis: 0.00014038,
-					eccentricity: "unknown",
-					inclination: "unknown",
-					longitudeAscendNode: "unknown",
-					argumentOfPerihelion: "unknown",
+					eccentricity: 0.01, //unknown, assume close to circular
+					inclination: 0, //unknown, assume 0
+					longitudeAscendNode: 48.21595207, //unknown
+					argumentOfPerihelion: 355.27377926, //unknown
 				},
 			},
 		],
@@ -1090,7 +1091,7 @@ export const moonsKepDictionary = new Map([
 				name: "Hi'iaka",
 				url: "2k_neptune.jpg",
 				zoomLevel: 0.1,
-				siderealPeriod: 0,
+				siderealPeriod: 49.12,
 				t_a: 2454615.0,
 				m_a: 152.8,
 				diameter: 0.00000214,
@@ -1116,7 +1117,7 @@ export const moonsKepDictionary = new Map([
 				name: "Namaka",
 				url: "2k_neptune.jpg",
 				zoomLevel: 0.1,
-				siderealPeriod: 0,
+				siderealPeriod: 18.2783,
 				t_a: 2454615.0,
 				m_a: 178.5,
 				diameter: 0.00000114,
@@ -1146,7 +1147,7 @@ export const moonsKepDictionary = new Map([
 				//J2000 & JArbitrary the same because not enough data, https://arxiv.org/pdf/2009.13733
 				name: "Dysnomia",
 				url: "2k_neptune.jpg",
-				zoomLevel: 0.1,
+				zoomLevel: 0.15,
 				siderealPeriod: 15.785899,
 				t_a: 2453979.0,
 				m_a: 178.78,

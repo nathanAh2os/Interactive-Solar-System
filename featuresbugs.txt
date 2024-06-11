@@ -3,49 +3,62 @@ Future Features
 1) Add minimum size to planets if scrolled out so you can still see where the planets are located. 
     If scrolled in more, give actual size of planets. ?
 
-2) Add moon orbits
-
+2) Add moon orbits to every parent satellite
+    DONE --
+    
 3) Add comit orbits
 
-4) Add more dwarf planet orbits
+4) Add main dwarf planet orbits
+    DONE --
 
 5) Change perspective camera rotational speed based on zoom level / distance from near plane
     i.e. the closer to the near plane, the lower the rotational speed needs to be
     Panning speed seems to already adjust to this, but I may need to do some further customization 
-    to the panning speeds when very zoomed in.
+    to the panning speeds when very zoomed in. ?
 
-6) Connect orbit path from end point to beginning point.
-    mercury fine
-    venus fine
-    mars bongo
-    earth fine
-    jupiter fine
-    saturn bongo
-    neptune fine
-    uranus fine
-    pluto bongo
+6) Connect orbit path from end point to beginning point. 
+    DONE --
 
 7) Add a toggle menu to turn on and off certain things (i.e. dwarf planets, comets, etc. )
+    DONE --
+
+8) Add rotation to the x & y axis 
+    DONE -- Had to add, up: [0, 0, 1], to cameraSettings to change up axis to z
+
+9) Add textures (if possible) to dwarf planets
+    DONE -- (added pluto, ceres, others are too far away for true realistic textures)
+
+10) Only load one parent satellite texture at a time (the current parent target)
+
+11) Add textures to applicable (large or close) moons
+    DONE -- Some further large moons only have certain portions mapped, only mars irregular moons have textures, 
+        other far out irregular moons will not have textures
 
 Bugs
 
-1) If windows resized, map gets cut off
-    Solved -- Created a resize event listener that reset width and height, then reset the scene and renderer
+1) White outline appears when map is clicked on.
+    SOLVED -- in solarSystemMap.css, add { overflow: hidden } property
 
-        1a) If resized and orbit control used, will stretch and disfigure orbit paths
-            Solved -- Initialize smaller fov values on the perspective camera
+2) Jagged moon orbit lines, more jagged further out from sun 
+    SOLVED (took ten hours to fix) -- do not apply centerOfRotation transformations directly in orbit [],
+    three js has issues with orbit lines of larger or very precise values, add position={centerOfRotation} to <Line />
 
-        1b) Orbit controls ZOOM & PANNING are reduced when resized
-            SOLVED -- Have no idea how I fixed
+3) When parent satellite position updates, moon orbit & positions do not update with it ? (need to test now)
 
-        1c) Camera initial z position get changed for some reason when first resized    
-            SOLVED -- Have no idea how I fixed
+4) Toggling off dwarf planets while looking at a dwarf planet does not remove its potential moons
+    SOLVED -- useEffect(..., [filterOptions["Dwarf Planets"]])
 
-2) White outline appears when map is clicked on.
-    Solved -- in solarSystemMap.css, add { overflow: hidden } property
+5) zoomToTarget messed up
 
-3) Orbit Controls on the 2D Renderer can get off from the solar map 
-    Solved --
+6) Satellite textures are sideways
 
-4) Dragging with right click on the orbit controls makes the planet labels go away from their intended planet targets
-    Solved --
+7) Can zoom through and into objects
+    SOLVED -- calculateClosestZoom()
+
+8) Sometimes shaking of objects for a few seconds after moving camera(due to damping, but we still want to keep damping)
+
+9) Dwarf planets toggled off & then back on while parent target is a dwarf planet does not load in moons until you click
+    back on the dwarf planet (this edge case isn't a huge deal but could be a little annoying)
+
+10) Attempting to zoom to sun causes a crash
+    SOLVED -- Added very own sunInfoPanel & added sun info into dictionary, some logic to load appropriate infoPanel

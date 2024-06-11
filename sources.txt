@@ -1,0 +1,17 @@
+//https://ssd.jpl.nasa.gov/planets/approx_pos.html
+//http://www.stjarnhimlen.se/comp/ppcomp.html#19
+//https://wgc.jpl.nasa.gov:8443/webgeocalc/#OrbitalElements
+
+https://www.solarsystemscope.com/textures/
+
+https://planetpixelemporium.com/pluto.html
+
+https://nasa3d.arc.nasa.gov/images
+
+https://www.planetary.org/space-images/ --Björn Jónsson --europa
+
+https://photojournal.jpl.nasa.gov/catalog/PIA20658 --pluto texture --edited with paint
+
+https://bjj.mmedia.is/data/io/io.html --io, ganymede texture
+
+https://www.go-astronomy.com/

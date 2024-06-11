@@ -3,14 +3,14 @@ import { useControls, useCreateStore, LevaPanel } from "leva";
 import { parsePhysicalInfo, parseAtmosphereInfo, parseOrbitalInfo, parseMoonsInfo, setReturnBtn } from "./parse-info";
 
 const InfoPanel = ({ data, tempUnit, pressureUnit, lengthUnit, orbitalUnit, parentTargetCoords, parentTargetZoomLevel,
-				targetMoonsCoords, zoomToObject }) => {
+				targetMoonsCoords, targetSelected }) => {
 	console.log("InfoPanel()");
 	const infoStore = useCreateStore();
 	let physicalInfo = parsePhysicalInfo(data);
 	let atmosphereInfo = parseAtmosphereInfo(data);
 	let orbitalInfo = parseOrbitalInfo(data);
-	let moonsInfo = parseMoonsInfo(data, targetMoonsCoords, zoomToObject);
-	let returnBtn = setReturnBtn(data.classification, parentTargetCoords, data.parentSatellite, parentTargetZoomLevel, zoomToObject);
+	let moonsInfo = parseMoonsInfo(data, targetMoonsCoords, targetSelected);
+	let returnBtn = setReturnBtn(data.classification, parentTargetCoords, data.parentSatellite, parentTargetZoomLevel, targetSelected);
 
 	//Options created within the useControls hook will be persisted between React re-renders, similar to how useState works.
 	const [, setPhysical] = useControls("Physical", () => (physicalInfo), { store: infoStore }); 
@@ -158,7 +158,6 @@ export default InfoPanel;
 	//Needed to fix weird bug where fields that haven't been set by the other useEffect()'s will not update
 	//when changing the data on the info panel (looking a new planet or moon)
 /* 	useEffect(() => {
-			console.log("useEffect() satellite-info data");
 			setPhysical({ Classification: data.classification, });
 			setPhysical({ Type: data.type });
 			setPhysical({ "Surface Gravity": "~ " + data.surfaceGravity +"g" });

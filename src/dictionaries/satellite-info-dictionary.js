@@ -2,6 +2,43 @@
 
 export const parentSatelliteDictionary = new Map([
 	[
+		"Sun",
+		{
+			name: "Sun",
+			classification: "G-type Main-Sequence Star",
+			shape: "Oblate Spheroid",
+			features: "",
+			//Physical
+			equatorialDiameter: 696300,
+			polarDiameter: 696310,
+			photosphereTemperature: 5500,
+			centerTemperature: 15000000,
+			coronaTemperature: 1500000,
+			surfaceGravity: 27.9,
+			meanBodyDensity: 1.408,
+			//Atmosphere
+			photosphereComposition: {
+				Hydrogen: "~73.46%",
+				Helium: "~24.85%",
+				Oxygen: "~0.77%",
+				Carbon: "~0.29%",
+				Iron: "~0.16%",
+				Neon: "~0.12%",
+				Nitrogen: "~0.09%",
+				Silicon: "~0.07%",
+				Magnesium: "~0.05%",
+				Sulfur: "~0.04%",
+			},
+			//Orbital
+			orbitalGalacticCenter: "225-250 million years",
+			rotationalEquatorial: "25.05d",
+			rotationalPolar: "34.40d",
+			galacticCenterOrbitalSpeed: 251,
+			stellarOrbitalSpeed: 20,
+			cosmicBackgroundOrbitalSpeed: 370,
+		},
+	],
+	[
 		"Mercury",
 		{
 			name: "Mercury",
@@ -57,7 +94,7 @@ export const parentSatelliteDictionary = new Map([
 			lowestPointValue: -2.9,
 			//Atmosphere
 			atmosphere: "Very Dense",
-			pressure: 92, //Very Dense
+			pressure: 92,
 			atmosphereComposition: {
 				"Carbon Dioxide": "~96.5%",
 				Nitrogen: "~3.5%",

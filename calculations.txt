@@ -89,3 +89,14 @@ const calculateMeanAnomaly = (meanLongitude, longitudePerihelion) => {
 	meanAnomaly = (meanAnomaly * Math.PI) / 180;
 	return meanAnomaly;
 };
+
+		//Rotate camera to point at new object
+		/* 		new TWEEN.Tween(ref.current.target)
+			.to({ x: lookAtX, y: lookAtY, z: lookAtZ })
+			.easing(TWEEN.Easing.Cubic.Out)
+			.start(); */
+		//Move the camera to new position
+		/* 		new TWEEN.Tween(ref.current.object.position)
+			.to({ x: positionX, y: positionY, z: positionZ }, 2500)
+			.easing(TWEEN.Easing.Linear.None)
+			.start(); */
