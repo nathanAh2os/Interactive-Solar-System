@@ -34,6 +34,7 @@ const ParentSatellite = ({ data, DOMAIN_URL, julianEphemerisDate, targetSelected
 
 	//Called initally once, used to build orbit
 	useEffect(() => {
+		//console.log("useEffect() []");
 		let keplerianRates = calculateKeplerianRates(julianEphemerisDate, data.keplerianJ2000, data.keplerianArbitrary);
 		let orbitPath = buildOrbit(julianEphemerisDate, data.keplerianJ2000, keplerianRates, terms, data.siderealPeriod);
 		//console.log(orbitPath);
